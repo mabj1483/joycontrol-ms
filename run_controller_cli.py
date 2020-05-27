@@ -10,7 +10,7 @@ from aioconsole import ainput
 from joycontrol import logging_default as log, utils
 from joycontrol.command_line_interface import ControllerCLI
 from joycontrol.controller import Controller
-from joycontrol.controller_state import ControllerState, button_push
+from joycontrol.controller_state import ControllerState, button_push, StickState
 from joycontrol.memory import FlashMemory
 from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
@@ -132,6 +132,86 @@ async def test_controller_buttons(controller_state: ControllerState):
     await button_push(controller_state, 'home')
 
 
+async def Mario_World_1(controller_state: ControllerState):
+    """
+    Defeats world 1-1 in the original super mario bros
+    """
+    LeftStick = controller_state.l_stick_state
+
+    if controller_state.get_controller() != Controller.PRO_CONTROLLER:
+        raise ValueError('This script only works with the Pro Controller!')
+
+    # waits until controller is fully connected
+    await controller_state.connect()
+    """
+    wait for user to press enter before starting.--------------------------------------------------------------
+    """
+    await ainput(prompt='Navigate to the Super Mario Bros title screen and press <enter> to continue.')
+
+    # Goto settings
+    await button_push(controller_state, 'plus', sec=1)
+    await asyncio.sleep(5)
+    await ControllerCLI._set_stick(LeftStick, 'right', None)
+    """
+    await button_push(controller_state, 'right', sec=2)
+    await asyncio.sleep(0.3)
+    await button_push(controller_state, 'left')
+    await asyncio.sleep(0.3)
+    await button_push(controller_state, 'a')
+    await asyncio.sleep(0.3)
+
+    # go all the way down
+    await button_push(controller_state, 'down', sec=4)
+    await asyncio.sleep(0.3)
+
+    # goto "Controllers and Sensors" menu
+    for _ in range(2):
+        await button_push(controller_state, 'up')
+        await asyncio.sleep(0.3)
+    await button_push(controller_state, 'right')
+    await asyncio.sleep(0.3)
+
+    # go all the way down
+    await button_push(controller_state, 'down', sec=3)
+    await asyncio.sleep(0.3)
+
+    # goto "Test Input Devices" menu
+    await button_push(controller_state, 'up')
+    await asyncio.sleep(0.3)
+    await button_push(controller_state, 'a')
+    await asyncio.sleep(0.3)
+
+    # goto "Test Controller Buttons" menu
+    await button_push(controller_state, 'a')
+    await asyncio.sleep(0.3)
+
+    # push all buttons except home and capture
+    button_list = controller_state.button_state.get_available_buttons()
+    if 'capture' in button_list:
+        button_list.remove('capture')
+    if 'home' in button_list:
+        button_list.remove('home')
+
+    user_input = asyncio.ensure_future(
+        ainput(prompt='Pressing all buttons... Press <enter> to stop.')
+    )
+
+    # push all buttons consecutively until user input
+    while not user_input.done():
+        for button in button_list:
+            await button_push(controller_state, button)
+            await asyncio.sleep(0.1)
+
+            if user_input.done():
+                break
+
+    # await future to trigger exceptions in case something went wrong
+    await user_input
+
+    # go back to home
+    await button_push(controller_state, 'home')
+    """
+
 async def set_amiibo(controller_state, file_path):
     """
     Sets nfc content of the controller state to contents of the given file.
@@ -196,8 +276,15 @@ async def _main(args):
             """
             await test_controller_buttons(controller_state)
 
+        async def _run_mario():
+            """
+            test_buttons - Navigates to the "Test Controller Buttons" menu and presses all buttons.
+            """
+            await Mario_World_1(controller_state)
+
         # add the script from above
         cli.add_command('test_buttons', _run_test_controller_buttons)
+        cli.add_command('mario', _run_mario)
 
         # Mash a button command
         async def call_mash_button(*args):
