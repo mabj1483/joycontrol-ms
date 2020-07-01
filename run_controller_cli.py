@@ -588,9 +588,6 @@ async def _main(args):
             button, interval = args
             await mash_button(controller_state, button, interval)
 
-        # add the script from above
-        cli.add_command('mash', call_mash_button)
-
         # Create nfc command
         async def nfc(*args):
             """
@@ -616,10 +613,8 @@ async def _main(args):
         cli.add_command('playback', _run_recording_playback)
         cli.add_command('delete_rec', _run_delete_recording)
         cli.add_command('mash', call_mash_button)
-        cli.add_command('amiibo', amiibo)
         # add the script from above
         cli.add_command('nfc', nfc)
-        cli.add_command('amiibo', ControllerCLI.deprecated('Command is deprecated - use "nfc" instead!'))
 
 
         if args.nfc is not None:
