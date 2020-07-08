@@ -4,7 +4,7 @@ Emulate Nintendo Switch Controllers over Bluetooth.
 Tested on Raspberry Pi 4B
 
 ## Features
-Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
+Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER.
 - button commands
 - stick state
 - nfc data
