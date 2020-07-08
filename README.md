@@ -10,7 +10,7 @@ Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
 - nfc data
 - controller keybinding
 - controller macro recording, playback, deleting
-- SparkFun Top pHAT integration
+- [SparkFun Top pHAT](https://www.sparkfun.com/products/16301?_ga=2.239021640.918075716.1594175635-1216658051.1509937706) integration
 
 ## Installation
 Set up your Top pHAT by following the guide [here](https://learn.sparkfun.com/tutorials/sparkfun-top-phat-hookup-guide?_ga=2.239584971.918075716.1594175635-1216658051.1509937706)
