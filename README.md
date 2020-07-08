@@ -1,4 +1,4 @@
-# joycontrol
+# joycontrol-ms
 Emulate Nintendo Switch Controllers over Bluetooth.
 
 Tested on Ubuntu 19.10, and with Raspberry Pi 3B+ and 4B Raspbian GNU/Linux 10 (buster)
@@ -8,13 +8,17 @@ Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
 - button commands
 - stick state
 - nfc data
+- controller keybinding
+- controller macro recording, playback, deleting
+- SparkFun Top pHAT integration
 
 ## Installation
+Set up your Top pHAT by following the guide [here](https://learn.sparkfun.com/tutorials/sparkfun-top-phat-hookup-guide?_ga=2.239584971.918075716.1594175635-1216658051.1509937706)
 - Install dependencies
 
-Ubuntu: Install the `dbus-python` and `libhidapi-hidraw0` packages
+Ubuntu: Install the `dbus-python` `libhidapi-hidraw0` and `keyboard` packages
 ```bash
-sudo apt install python3-dbus libhidapi-hidraw0
+sudo apt install python3-dbus libhidapi-hidraw0 keyboard
 ```
 
 Arch Linux Derivatives: Install the `hidapi` and `bluez-utils-compat`(AUR) packages
